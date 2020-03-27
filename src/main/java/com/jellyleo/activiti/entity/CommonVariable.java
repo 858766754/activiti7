@@ -8,7 +8,6 @@ package com.jellyleo.activiti.entity;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,23 +19,23 @@ import lombok.NoArgsConstructor;
  * @version 1.0.0
  */
 @Data
-@Builder(toBuilder=true)
+//@Builder(toBuilder=true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommonVariable {
 
 	private List<String> signList;
-	
+
 	private Integer day;
-	
+
 	private Integer amount;
-	
+
 	private Integer val;
-	
+
 	private Integer pay;
-	
+
 	private Integer order;
-	
+
 	private Integer sendout;
 
 	private Integer pass;

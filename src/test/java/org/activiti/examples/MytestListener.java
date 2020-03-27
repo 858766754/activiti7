@@ -3,7 +3,7 @@
  * Copyright © 2019 jellyleo.com 
  * All rights reserved. 
  */
-package com.jellyleo.activiti.listener;
+package org.activiti.examples;
 
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.TaskListener;
@@ -15,7 +15,7 @@ import org.activiti.engine.delegate.TaskListener;
  * @created 2019年11月21日
  * @version 1.0.0
  */
-public class JlTaskListener implements TaskListener {
+public class MytestListener implements TaskListener {
 
 	String EVENTNAME_CREATE = "create";
 	String EVENTNAME_ASSIGNMENT = "assignment";

@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.DelegationState;
 import org.activiti.engine.task.Task;
@@ -50,10 +51,39 @@ public class TaskController extends BaseController {
 	public String taskQuery(HttpServletRequest request, HttpServletResponse response) {
 
 		try {
-			List<Task> list = taskService.createTaskQuery()// 创建任务查询对象
+			List<Task> list = taskService.createTaskQuery().taskCandidateUser("xiaohua1")// taskCandidateOrAssigned("")//
+					// 创建任务查询对象
 					.list();
+
 			if (list != null && list.size() > 0) {
 				for (Task task : list) {
+					System.out.println("任务ID:" + task.getId());
+					System.out.println("任务名称:" + task.getName());
+					System.out.println("任务的创建时间:" + task.getCreateTime());
+					System.out.println("任务的办理人:" + task.getAssignee());
+					System.out.println("流程实例ID：" + task.getProcessInstanceId());
+					System.out.println("执行对象ID:" + task.getExecutionId());
+					System.out.println("流程定义ID:" + task.getProcessDefinitionId());
+					System.out.println("*****************************************************************************");
+				}
+			}
+		} catch (Exception e) {
+			return "fail";
+		}
+		return "success";
+	}
+
+	@RequestMapping(value = "/queryHis")
+	@ResponseBody
+	public String taskQuery2(HttpServletRequest request, HttpServletResponse response) {
+
+		try {
+			List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery()
+					// .taskAssignee(assignee)
+					.finished().list();
+
+			if (list != null && list.size() > 0) {
+				for (HistoricTaskInstance task : list) {
 					System.out.println("任务ID:" + task.getId());
 					System.out.println("任务名称:" + task.getName());
 					System.out.println("任务的创建时间:" + task.getCreateTime());
@@ -225,12 +255,11 @@ public class TaskController extends BaseController {
 //			taskService.setVariable(taskId, key, value);
 			// 设置流程参数（多）
 			taskService.setVariables(taskId, variables);
-
 			// 若是委托任务，请先解决委托任务
 			Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-			if (DelegationState.PENDING.equals(task.getDelegationState())) {
-				return "resolve delegation first";
-			}
+//			if (DelegationState.PENDING.equals(task.getDelegationState())) {
+//				return "resolve delegation first";
+//			}
 			taskService.complete(taskId);
 			System.out.println("任务完成");
 			System.out.println("任务ID:" + taskId);
@@ -263,7 +292,11 @@ public class TaskController extends BaseController {
 		}
 
 		try {
-			taskService.delegateTask(taskId, assignee);
+//			taskService.delegateTask(taskId, assignee);
+			taskService.addCandidateUser(taskId, "xiaohua1");
+			taskService.addCandidateUser(taskId, "xiaohua2");
+			taskService.addCandidateUser(taskId, "xiaohua3");
+			// taskService.setAssignee(taskId, assignee);
 			System.out.println("任务已委托给：" + assignee);
 			System.out.println("*****************************************************************************");
 		} catch (Exception e) {

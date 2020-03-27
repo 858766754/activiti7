@@ -14,6 +14,7 @@ import java.util.zip.ZipInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -147,8 +148,15 @@ public class ProcessController extends BaseController {
 					System.out.println("资源名称png文件:" + processDefinition.getDiagramResourceName());
 					System.out.println("部署对象ID:" + processDefinition.getDeploymentId());
 					System.out.println("*****************************************************************************");
+
+					BpmnModel model = repositoryService.getBpmnModel(processDefinition.getId());
+
+					System.out.println(JSON.toJSONString(model.getProcesses()));
+					System.out.println(JSON.toJSONString(model.getItemDefinitions()));
+
 				}
 			}
+
 		} catch (Exception e) {
 			return "fail";
 		}
